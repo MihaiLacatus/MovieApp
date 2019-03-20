@@ -39,7 +39,8 @@
         android:numStars="5"
         android:stepSize="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_movie_name" />
+        app:layout_constraintTop_toBottomOf="@+id/text_movie_name"
+        android:isIndicator="false"/>
 
     <Button
         android:id="@+id/btnDelete"

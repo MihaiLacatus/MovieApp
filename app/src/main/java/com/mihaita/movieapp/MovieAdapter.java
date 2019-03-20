@@ -15,13 +15,14 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
 
     List<MovieBean> movieList;
+    float changeRatingBar;
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView movieID, movieName;
         RatingBar movieRatingBar;
         Button btnDelete;
 
-        MyViewHolder(View view){
+        MyViewHolder(View view) {
             super(view);
             movieID = view.findViewById(R.id.text_movie_id);
             movieName = view.findViewById(R.id.text_movie_name);
@@ -30,7 +31,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         }
     }
 
-    MovieAdapter(List<MovieBean> movieList){ this.movieList=movieList; }
+    MovieAdapter(List<MovieBean> movieList) {
+        this.movieList = movieList;
+    }
 
     @NonNull
     @Override
@@ -45,25 +48,33 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull final MovieAdapter.MyViewHolder viewHolder, int i) {
 
-    final MovieBean movie = movieList.get(i);
+        final MovieBean movie = movieList.get(i);
 
-    viewHolder.movieID.setText(String.valueOf(movie.getMovieID()));
-    viewHolder.movieName.setText(movie.getMovieName());
-    viewHolder.movieRatingBar.setRating(movie.getMovieRating());
-
-    viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            movieList.remove(viewHolder.getAdapterPosition());
-            Toast.makeText(v.getContext(), "Record Deleted!"
-                    , Toast.LENGTH_LONG).show();
-            notifyDataSetChanged();
-        }
-    });
+        viewHolder.movieID.setText(String.valueOf(movie.getMovieID()));
+        viewHolder.movieName.setText(movie.getMovieName());
+        viewHolder.movieRatingBar.setRating(movie.getMovieRating());
+        viewHolder.movieRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratingBar.setRating(rating);
+                Toast.makeText(ratingBar.getContext(), "Rating Changed", Toast.LENGTH_LONG).show();
+            }
+        });
 
 
+        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                movieList.remove(viewHolder.getAdapterPosition());
+                Toast.makeText(v.getContext(), "Record Deleted!"
+                        , Toast.LENGTH_LONG).show();
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
-    public int getItemCount() { return this.movieList.size(); }
+    public int getItemCount() {
+        return this.movieList.size();
+    }
 }
